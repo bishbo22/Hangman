@@ -2,6 +2,7 @@ import java.awt.*;
 import java.util.Arrays;
 import java.util.Scanner;
 
+
 public class Hangman {
 
     public static void main(String[] args) {
