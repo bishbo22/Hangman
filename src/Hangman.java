@@ -2,11 +2,13 @@ import java.awt.*;
 import java.util.Arrays;
 import java.util.Scanner;
 
+import static java.util.Collections.replaceAll;
+
 public class Hangman {
 
     public static void main(String[] args) {
         Scanner scan = new Scanner(System.in);
-        String country = Word.randomCountry();
+        String country = Word.randomCountry().toLowerCase();
         char[] answer = new char[country.length()];
         DrawingPanel panel = new DrawingPanel(500, 500);
         Graphics g = panel.getGraphics();
@@ -70,14 +72,14 @@ public class Hangman {
         if (mistakeCounter > 5) {
             g.drawLine(300,225,325,250);
             g.setColor(Color.white);
-            g.fillRect(0,300,500,500);
+            g.fillRect(0,310,500,500);
             g.setColor(Color.black);
             g.drawString("You Lose, The answer was \"" + country + "\"",50,350);
             over = true;
         }
         if (winOrLose(answer)) {
             g.setColor(Color.white);
-            g.fillRect(0,300,500,500);
+            g.fillRect(0,310,500,500);
             g.setColor(Color.black);
             g.drawString("You Win",50,350);
             over = true;
