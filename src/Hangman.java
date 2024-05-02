@@ -125,6 +125,11 @@ public class Hangman {
         return over;
     }
 
+    /**
+     * winOrLose() takes the answer array and checks to see if there are any underscores left in the word (meaning that the word has or hasn't been guessed), returning a boolean variable to let the code know if the user won or not
+     * @param answer : char[],
+     * @return boolean
+     */
     public static boolean winOrLose(char[] answer) {
         int counter = 0;
         boolean win = false;
