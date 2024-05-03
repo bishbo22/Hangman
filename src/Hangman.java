@@ -1,5 +1,6 @@
 import java.awt.*;
 import java.util.Arrays;
+import java.util.Random;
 import java.util.Scanner;
 /**********************************************************************
  * @file Hangman.java
@@ -10,9 +11,12 @@ import java.util.Scanner;
 public class Hangman {
 
     public static void main(String[] args) {
-        //Create objects to make a scanner and randomize a country from the Word class
+        //Create objects to make a scanner and randomize a country
         Scanner scan = new Scanner(System.in);
-        String country = Word.randomCountry().toLowerCase();
+        Random rand = new Random();
+        String[] countries = {"Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Anguilla", "Antarctica", "Argentina", "Armenia", "Aruba", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bermuda", "Bhutan", "Bolivia", "Botswana", "Brazil", "Bulgaria",  "Burundi", "Cambodia", "Cameroon", "Canada", "Chad", "Chile", "China", "Colombia", "Comoros", "Congo", "Cuba", "Cyprus", "Denmark", "Djibouti", "Dominica", "Ecuador", "Egypt", "Eritrea", "Estonia", "Ethiopia", "Fiji", "Finland", "France", "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Gibraltar", "Greece", "Greenland", "Grenada", "Guadeloupe", "Guam", "Guatemala", "Guinea", "Guyana", "Haiti", "Honduras", "Hungary", "Iceland", "India", "Indonesia", "Iran", "Iraq", "Ireland", "Israel", "Italy", "Jamaica", "Japan", "Jordan", "Kazakhstan", "Kenya", "Kiribati", "Kuwait", "Kyrgyzstan", "Latvia", "Lebanon", "Lesotho", "Liberia", "Liechtenstein", "Lithuania", "Luxembourg", "Macau", "Macedonia", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Martinique", "Mauritania", "Mauritius", "Mexico", "Micronesia", "Monaco", "Mongolia", "Montserrat", "Morocco", "Mozambique", "Myanmar", "Namibia", "Nauru", "Nepal", "Netherlands", "Nicaragua", "Niger", "Nigeria", "Norway", "Oman", "Pakistan", "Panama", "Paraguay", "Peru", "Philippines", "Pitcairn", "Poland", "Portugal", "Qatar", "Reunion", "Romania", "Russia", "Rwanda", "Samoa", "Senegal", "Seychelles", "Singapore", "Slovakia", "Slovenia", "Somalia", "Spain", "Sudan", "Suriname", "Swaziland", "Sweden", "Switzerland", "Taiwan", "Tajikistan", "Tanzania", "Thailand", "Togo", "Tonga", "Tunisia", "Turkey", "Turkmenistan", "Tuvalu", "Uganda", "Ukraine", "Uruguay", "Uzbekistan", "Vanuatu", "Venezuela", "Vietnam", "Yemen", "Yugoslavia", "Zambia", "Zimbabwe"};
+        String country = countries[rand.nextInt(165)].toLowerCase();
+        Word word = new Word(country);
 
         //Create a character array to make answer as long as the letters in the country's name
         char[] answer = new char[country.length()];
@@ -84,6 +88,7 @@ public class Hangman {
      */
     public static boolean drawHangman(Graphics g,char[] answer,int mistakeCounter,String country) {
         boolean over = false;
+        //The following g. codes draws the initial hangman setup, erasing what was there before
         g.setColor(Color.white);
         g.fillRect(0,0,500,500);
         g.setColor(Color.black);
@@ -91,7 +96,11 @@ public class Hangman {
         g.drawLine(100,300,100,50);
         g.drawLine(100,50,300,50);
         g.drawLine(300,50,300,75);
+
+        //Draws the user's latest response below the hangman setup
         g.drawString(Arrays.toString(answer),50,350);
+
+        //Checks to see which mistake the user is at (0-6) and draws the appropriate limb
         if (mistakeCounter > 0) {
             g.drawOval(275,75,50,50);
         }
@@ -107,6 +116,8 @@ public class Hangman {
         if (mistakeCounter > 4) {
             g.drawLine(300,225,275,250);
         }
+
+        //This if statement senses that the user lost and draws a losing message on the screen and informs the user what the correct country is
         if (mistakeCounter > 5) {
             g.drawLine(300,225,325,250);
             g.setColor(Color.white);
@@ -115,6 +126,8 @@ public class Hangman {
             g.drawString("You Lose, The answer was \"" + country + "\"",50,350);
             over = true;
         }
+
+        //This if statement asks the method winOrLose if the user won or not and draws a message saying the user won
         if (winOrLose(answer)) {
             g.setColor(Color.white);
             g.fillRect(0,310,500,500);
@@ -122,25 +135,33 @@ public class Hangman {
             g.drawString("You Win",50,350);
             over = true;
         }
+
+        //returns whether the game is over or not and returns this to the main method
         return over;
     }
 
     /**
-     * winOrLose() takes the answer array and checks to see if there are any underscores left in the word (meaning that the word has or hasn't been guessed), returning a boolean variable to let the code know if the user won or not
+     * winOrLose() takes the answer array and checks to see if there are any underscores left in the word (meaning that the word has or hasn't been guessed), returning a boolean variable to let the drawHangman method know if the user won or not
      * @param answer : char[],
      * @return boolean
      */
     public static boolean winOrLose(char[] answer) {
         int counter = 0;
         boolean win = false;
+
+        //Tests each character in the array to see if the letter has an underscore or not
         for (char c : answer) {
             if (c == '_') {
                 counter++;
             }
         }
+
+        //Uses the counter to see if there are no more underscores left in the user's guess and sees if the win variable needs to be changed
         if (counter == 0) {
             win = true;
         }
+
+        //Returns a boolean value that determines the outcome of the game when this method is called
         return win;
     }
 }
